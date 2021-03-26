@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from json import load
 
 # MVT = model view template
 # контроллеры
@@ -7,7 +7,12 @@ from django.shortcuts import render
 # папка templates подключена
 
 def index(request):
-    return render(request, "mainapp/index.html")  # первый параметр сам req, и путь до шаблона index.html
+    context = {"title" : "GeekShop"}
+    return render(request, "mainapp/index.html", context)  # первый параметр сам req, и путь до шаблона index.html
 
 def products(request):
-    return render(request, "mainapp/products.html")
+    with open("mainapp/fixtures/products.json", "r", encoding="utf-8") as file:
+        context = load(file)
+        for i in context["products"]:
+            i["inCart"] = eval(i["inCart"])
+    return render(request, "mainapp/products.html", context)
