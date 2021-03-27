@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from json import load
+from mainapp.models import Product,ProductCategory
 
 # MVT = model view template
 # контроллеры
@@ -15,4 +16,8 @@ def products(request):
         context = load(file)
         for i in context["products"]:
             i["inCart"] = eval(i["inCart"])
-    return render(request, "mainapp/products.html", context)
+    data = {
+        "products": Product.objects.all(),
+        "categories": ProductCategory.objects.all(),
+    }
+    return render(request, "mainapp/products.html", data)
