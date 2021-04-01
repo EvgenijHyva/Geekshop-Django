@@ -1,0 +1,33 @@
+{"title" : "GeekShop - Каталог",
+  "products": [
+                   {"name" : "Худи черного цвета с монограммами adidas Originals",
+                    "price": "6 090,00 руб.",
+                    "description" : "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.",
+                    "picture": "Adidas-hoodie.png","inCart": "False"
+                   },
+                   {"name": "Синяя куртка The North Face",
+                    "price": "23 725,00 руб.",
+                    "description": "Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.",
+                    "picture": "Blue-jacket-The-North-Face.png", "inCart": "True"
+                   },
+                   {"name": "Коричневый спортивный oversized-топ ASOS DESIGN",
+                    "price": "3 390,00 руб.",
+                    "description": "Материал с плюшевой текстурой. Удобный и мягкий.",
+                    "picture": "Brown-sports-oversized-top-ASOS-DESIGN.png", "inCart": "False"
+                   },
+                   {"name": "Черный рюкзак Nike Heritage",
+                    "price": "2 340,00 руб.",
+                    "description": "Плотная ткань. Легкий материал.",
+                    "picture": "Black-Nike-Heritage-backpack.png", "inCart": "False"
+                   },
+                   {"name": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
+                    "price": "13 590,00 руб.",
+                    "description": "Гладкий кожаный верх. Натуральный материал.",
+                    "picture": "Black-Dr-Martens-shoes.png", "inCart": "False"
+                   },
+                   {"name": "Темно-синие широкие строгие брюки ASOS DESIGN",
+                    "price": "2 890,00 руб.",
+                    "description": "Легкая эластичная ткань сирсакер Фактурная ткань.",
+                    "picture": "Dark-blue-wide-leg-ASOs-DESIGN-trousers.png", "inCart": "False"
+                   }
+               ]}
