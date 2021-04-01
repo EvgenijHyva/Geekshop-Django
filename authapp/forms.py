@@ -1,5 +1,6 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from authapp.models import User
+from django import forms
 
 
 class UserLoginForm(AuthenticationForm):
@@ -19,7 +20,7 @@ class UserLoginForm(AuthenticationForm):
             field.widget.attrs["class"] = "form-control py-4"
 
 
-class UserRegisterform(UserCreationForm):
+class UserRegisterform(UserCreationForm):  # форма регистрации register.html
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name", "password1", "password2")
@@ -35,3 +36,20 @@ class UserRegisterform(UserCreationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control py-4"
             field.help_text = ''
+
+
+class UserProfileForm(UserChangeForm):  # форма обновления информации в profile.html
+    avatar = forms.ImageField(widget=forms.FileInput()) #
+
+    class Meta:  # добавим поля которые для обновления и которые служат для отображения
+        model = User
+        fields = ("first_name", "last_name", "avatar", "username", "email")
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs["class"] = "form-control py-4"
+
+        self.fields['username'].widget.attrs['readonly'] = True  # поле только для чтения
+        self.fields['email'].widget.attrs['readonly'] = True
+        self.fields["avatar"].widget.attrs["class"] = "custom-file-input"

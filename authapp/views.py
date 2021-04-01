@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 # чтобы тользоваться формами нужно их импортировать
-from authapp.forms import UserLoginForm, UserRegisterform
+from authapp.forms import UserLoginForm, UserRegisterform, UserProfileForm
 # так же нужно импортировать модель для работы с ней
 from authapp.models import User
 from django.contrib import auth
@@ -53,7 +53,20 @@ def logout(request):
 
 # контроллер личного кабинета:
 def profile(request):
+    # обновление данных!!!
+    if request.method == "POST":
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)  # для работы с
+        # изображениями files
+        print(request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("auth:profile"))
+    # просто заходим в личный кабинет проверить данные
+    else:
+        form = UserProfileForm(instance=request.user)
+
     content = {
-        "title": "GeekShop - профиль"
+        "title": "GeekShop - профиль",
+        "form": form
     }
     return render(request, "authapp/profile.html", content)
