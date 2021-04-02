@@ -57,7 +57,6 @@ def profile(request):
     if request.method == "POST":
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)  # для работы с
         # изображениями files
-        print(request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("auth:profile"))
