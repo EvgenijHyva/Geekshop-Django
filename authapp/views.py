@@ -67,16 +67,13 @@ def profile(request):
     # просто заходим в личный кабинет проверить данные
     else:
         form = UserProfileForm(instance=request.user)
-    total_quantity = 0
-    total_sum = 0
 
 
-    baskets = Basket.objects.filter(user=request.user)
     content = {
         "title": "GeekShop - профиль",
         "form": form,
-        "baskets": baskets,  # фильтрация по пользователю из всех корзин
-        "total_quantity": sum(basket.quantity for basket in baskets),
-        "total_sum": sum(basket.sum() for basket in baskets)
+        "baskets": Basket.objects.filter(user=request.user),  # фильтрация по пользователю из всех корзин
+        #"total_quantity": sum(basket.quantity for basket in baskets),
+        #"total_sum": sum(basket.sum() for basket in baskets)
     }
     return render(request, "authapp/profile.html", content)
