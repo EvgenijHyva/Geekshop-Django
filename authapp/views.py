@@ -17,6 +17,7 @@ def login(request):
             password = request.POST["password"]
             user = auth.authenticate(username=username, password=password)
             print(user.__dict__)
+            #messages.success(request, "Вы успешно авторизовались")
             if user and user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse("index"))
@@ -39,6 +40,7 @@ def register(request):
             return HttpResponseRedirect(reverse("auth:login"))
         else:
             print(form.errors)
+
     else:
         form = UserRegisterform()
     content = {
@@ -65,10 +67,17 @@ def profile(request):
     # просто заходим в личный кабинет проверить данные
     else:
         form = UserProfileForm(instance=request.user)
-
+    total_quantity = 0
+    total_sum = 0
+    baskets = Basket.objects.filter(user=request.user)
+    for basket in baskets:
+        total_quantity += basket.quantity
+        total_sum += basket.sum()
     content = {
         "title": "GeekShop - профиль",
         "form": form,
-        "baskets": Basket.objects.filter(user=request.user),  # фильтрация по пользователю из всех корзин
+        "baskets": baskets,  # фильтрация по пользователю из всех корзин
+        "total_quantity": total_quantity,
+        "total_sum": total_sum
     }
     return render(request, "authapp/profile.html", content)

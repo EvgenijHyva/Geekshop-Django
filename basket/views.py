@@ -15,7 +15,7 @@ def basket_add(request, product_id):
         basket.save()
     else:
         basket = baskets.first()
-        print(f"basket first: {baskets}")
+        print(f"baskets: {baskets}")
         basket.quantity += 1
         basket.save()
     # print(f"Meta: {request.META['HTTP_REFERER']}")
