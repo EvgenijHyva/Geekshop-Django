@@ -12,14 +12,10 @@ def index(request):
     return render(request, "mainapp/index.html", context)  # первый параметр сам req, и путь до шаблона index.html
 
 def products(request, id=None):
-    with open("mainapp/fixtures/product.json", "r", encoding="utf-8") as file:
-        context = load(file)
-        for i in context["products"]:
-            i["inCart"] = eval(i["inCart"])
     data = {
         "title": "GeekShop - Каталог",
         "products": Product.objects.all(),
         "categories": ProductCategory.objects.all(),
     }
-    print(id)
+   # print(id)
     return render(request, "mainapp/products.html", data)

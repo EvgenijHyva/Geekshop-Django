@@ -71,11 +71,9 @@
                             <p class="card-text">{{product.description}}</p>
                         </div>
                         <div class="card-footer text-center">
-                            {% if product.inCart %}
-                            <button type="button" class="btn btn-outline-danger">Удалить из корзины</button>
-                            {% else %}
+                            <a href="{% url 'baskets:basket_add' product.id %}">
                             <button type="button" class="btn btn-outline-success">Отправить в корзину</button>
-                            {% endif%}
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ from authapp.forms import UserLoginForm, UserRegisterform, UserProfileForm
 from authapp.models import User
 from django.contrib import auth
 from django.urls import reverse
-
+from basket.models import Basket
 
 def login(request):
     # авторизация пользователя
@@ -66,6 +66,7 @@ def profile(request):
 
     content = {
         "title": "GeekShop - профиль",
-        "form": form
+        "form": form,
+        "baskets": Basket.objects.filter(user=request.user),  # фильтрация по пользователю из всех корзин
     }
     return render(request, "authapp/profile.html", content)
