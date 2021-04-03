@@ -6,6 +6,7 @@ from authapp.models import User
 from django.contrib import auth
 from django.urls import reverse
 from basket.models import Basket
+from django.contrib import messages  # выводит сообщения если операция успешна или нет
 
 def login(request):
     # авторизация пользователя
@@ -34,6 +35,7 @@ def register(request):
         form = UserRegisterform(data=request.POST)
         if form.is_valid():
             form.save()  # метод сохраняет данные формы в БД
+            messages.success(request, "Вы успешно зарегистрировались")  # при регистрации
             return HttpResponseRedirect(reverse("auth:login"))
         else:
             print(form.errors)
