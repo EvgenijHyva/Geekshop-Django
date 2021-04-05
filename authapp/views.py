@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.urls import reverse
 from basket.models import Basket
 from django.contrib import messages  # выводит сообщения если операция успешна или нет
+from django.contrib.auth.decorators import login_required
 
 def login(request):
     # авторизация пользователя
@@ -16,11 +17,11 @@ def login(request):
             username = request.POST["username"]
             password = request.POST["password"]
             user = auth.authenticate(username=username, password=password)
-            print(user.__dict__)
+            #print(user.__dict__)
             #messages.success(request, "Вы успешно авторизовались")
             if user and user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse("index"))
+                return HttpResponseRedirect(reverse("products:index"))
 
     else:
         form = UserLoginForm()
@@ -56,6 +57,7 @@ def logout(request):
 
 
 # контроллер личного кабинета:
+@login_required
 def profile(request):
     # обновление данных!!!
     if request.method == "POST":
