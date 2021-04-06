@@ -1,5 +1,6 @@
 from django.urls import path
-from adminapp.views import index, admin_users_read, admin_users_create, admin_users_update, admin_users_delete
+from adminapp.views import index, admin_users_read, admin_users_create, admin_users_update, admin_users_delete, \
+    admin_products, admin_categories
 
 app_name = "adminapp"
 
@@ -11,4 +12,6 @@ urlpatterns = [
     # редактирование определенного пользователя а значит передаем ID
     path("admin-users-delete/<int:id>/", admin_users_delete, name="admin_users_delete"),
     # удаление пользователя
+    path("admin-products", admin_products, name="admin_products"),
+    path("admin-categories", admin_categories, name="admin_categories")
 ]

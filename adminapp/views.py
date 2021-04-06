@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import user_passes_test
 @user_passes_test(lambda u: u.is_superuser)  # когда проходит тест и может посетить эту страницу,
 def index(request):  # в противном случае переходит на страницу login
     context = {
-        "title": "GeekShop - Admin"
+        "title": "GeekShop - Admin main"
     }
     return render(request, "adminapp/index.html", context)
 
@@ -19,7 +19,7 @@ def index(request):  # в противном случае переходит н�
 @user_passes_test(lambda u: u.is_superuser)
 def admin_users_read(request):
     context = {
-        "title": "GeekShop - Admin",
+        "title": "GeekShop - Admin users",
         "users": User.objects.all()  # подтягивает всех юзеров из БД
     }
     return render(request, "adminapp/admin-users-read.html", context)
@@ -39,7 +39,7 @@ def admin_users_create(request):
     else:
         form = UserAdminRegisterForm()
     context = {
-        "title": "GeekShop - Admin",
+        "title": "GeekShop - Admin create user",
         "form": form
     }
     return render(request, "adminapp/admin-users-create.html", context)
@@ -57,7 +57,7 @@ def admin_users_update(request, id):
     else:
         form = UserAdminProfileForm(instance=user)
     context = {
-        "title": "GeekShop - Admin",
+        "title": "GeekShop - Admin update user",
         "form": form,
         "selected_user": user
     }
@@ -76,3 +76,18 @@ def admin_users_delete(request, id):
         user.save()
         messages.warning(request, f"удален пользователь {user.username}")
     return HttpResponseRedirect(reverse("admins:admin_users_read"))
+
+
+#
+def admin_products(request):
+    context = {
+        "title": "GeekShop - Admin-products",
+    }
+    return render(request, "adminapp/admin_product.html", context)
+
+
+def admin_categories(request):
+    context = {
+        "title": "GeekShop - Admin-categories"
+    }
+    return render(request, "adminapp/admin_categories.html", context)
