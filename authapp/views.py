@@ -6,8 +6,9 @@ from authapp.models import User
 from django.contrib import auth
 from django.urls import reverse
 from basket.models import Basket
-from django.contrib import messages  # выводит сообщения если операция успешна или нет
+from django.contrib import messages  # выводит сообщения  если операция успешна или нет
 from django.contrib.auth.decorators import login_required
+
 
 def login(request):
     # авторизация пользователя
@@ -17,8 +18,8 @@ def login(request):
             username = request.POST["username"]
             password = request.POST["password"]
             user = auth.authenticate(username=username, password=password)
-            #print(user.__dict__)
-            #messages.success(request, "Вы успешно авторизовались")
+            # print(user.__dict__)
+            # messages.success(request, "Вы успешно авторизовались")
             if user and user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse("products:index"))
@@ -70,12 +71,11 @@ def profile(request):
     else:
         form = UserProfileForm(instance=request.user)
 
-
     content = {
         "title": "GeekShop - профиль",
         "form": form,
         "baskets": Basket.objects.filter(user=request.user),  # фильтрация по пользователю из всех корзин
-        #"total_quantity": sum(basket.quantity for basket in baskets),
-        #"total_sum": sum(basket.sum() for basket in baskets)
+        # "total_quantity": sum(basket.quantity for basket in baskets),
+        # "total_sum": sum(basket.sum() for basket in baskets)
     }
     return render(request, "authapp/profile.html", content)
