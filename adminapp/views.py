@@ -54,3 +54,16 @@ def admin_users_update(request, id):
         "selected_user": user
     }
     return render(request, "adminapp/admin-users-update-delete.html", context)
+
+
+# контроллер на удаление
+def admin_users_delete(request, id):
+    user = User.objects.get(id=id)
+    #user.is_active = False
+    #user.save()
+    if user.is_superuser:
+        messages.warning(request, "superuser cant be deleted")
+    else:
+        user.delete()
+        messages.warning(request, f"удален пользователь {user.username}")
+    return HttpResponseRedirect(reverse("admins:admin_users_read"))

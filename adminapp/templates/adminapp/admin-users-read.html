@@ -53,6 +53,7 @@
                                 </tfoot>
                                 <tbody>
                                 {% for user in users %}
+                                {% if not user.is_superuser %}
                                     <tr>
                                         <td><a href="{% url 'admins:admin_users_update' user.id %}"
                                                style="color: dodgerblue">{{user.username}}</a></td>
@@ -74,6 +75,7 @@
                                             {% endif%}
                                         </td>
                                     </tr>
+                                {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
