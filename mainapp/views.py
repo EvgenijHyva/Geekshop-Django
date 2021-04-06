@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from json import load
-from mainapp.models import Product,ProductCategory
+from mainapp.models import Product, ProductCategory
 
 # MVT = model view template
 # контроллеры
@@ -14,8 +14,16 @@ def index(request):
 def products(request, id=None):
     data = {
         "title": "GeekShop - Каталог",
-        "products": Product.objects.all(),
+        "products":  Product.objects.all(),
         "categories": ProductCategory.objects.all(),
     }
    # print(id)
+    return render(request, "mainapp/products.html", data)
+
+def products_by_category(request, category_id=None):
+    data = {
+        "title": "GeekShop - Каталог",
+        "products": Product.objects.filter(category_id=category_id),
+        "categories": ProductCategory.objects.all()
+    }
     return render(request, "mainapp/products.html", data)

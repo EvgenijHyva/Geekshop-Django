@@ -1,16 +1,22 @@
-from django.shortcuts import render,HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from authapp.models import User
 from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm
 from django.contrib import messages  # выводит сообщения если операция успешна или нет
+from django.contrib.auth.decorators import user_passes_test
 
-def index(request):
+
+# оборачиваем все контролеры в декоратор и передаем лямда функцию
+
+@user_passes_test(lambda u: u.is_superuser)  # когда проходит тест и может посетить эту страницу,
+def index(request):  # в противном случае переходит на страницу login
     context = {
         "title": "GeekShop - Admin"
     }
     return render(request, "adminapp/index.html", context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_read(request):
     context = {
         "title": "GeekShop - Admin",
@@ -20,6 +26,7 @@ def admin_users_read(request):
 
 
 # контроллер для создания пользователя на странице admin-users-create
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_create(request):
     if request.method == "POST":
         form = UserAdminRegisterForm(data=request.POST, files=request.FILES)
@@ -38,6 +45,7 @@ def admin_users_create(request):
     return render(request, "adminapp/admin-users-create.html", context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_update(request, id):
     # обьект пользователя которого выбрали
     user = User.objects.get(id=id)
@@ -57,13 +65,14 @@ def admin_users_update(request, id):
 
 
 # контроллер на удаление
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_delete(request, id):
     user = User.objects.get(id=id)
-    #user.is_active = False
-    #user.save()
     if user.is_superuser:
         messages.warning(request, "superuser cant be deleted")
     else:
-        user.delete()
+        # user.delete()
+        user.is_active = False
+        user.save()
         messages.warning(request, f"удален пользователь {user.username}")
     return HttpResponseRedirect(reverse("admins:admin_users_read"))
