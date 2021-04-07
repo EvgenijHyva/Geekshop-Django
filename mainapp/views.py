@@ -12,13 +12,19 @@ def index(request):
     return render(request, "mainapp/index.html", context)  # первый параметр сам req, и путь до шаблона index.html
 
 def products(request, id=None):
-    data = {
-        "title": "GeekShop - Товар " + str(id),
-        "categories": ProductCategory.objects.all(),
-        "products": Product.objects.filter(id=id)
-    }
-    return render(request, "mainapp/product.html", data)
-
+    data = {"categories": ProductCategory.objects.all(),}
+    if id:
+        data.update({
+            "title": "GeekShop - Товар " + str(id),
+            "products": Product.objects.filter(id=id)
+        })
+        return render(request, "mainapp/product.html", data)
+    else:
+        data.update({
+            "title": "GeekShop - Товары ",
+            "products": Product.objects.all()
+        })
+        return render(request, "mainapp/products.html", data)
 
 
 def products_by_category(request, category_id=None):
