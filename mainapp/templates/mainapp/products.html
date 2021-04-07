@@ -19,7 +19,7 @@
                 {% for category in categories %}
                     <a href="{% url 'products:products_by_category' category.id %}" class="list-group-item">{{category.name}}</a>
                 {% endfor %}
-                    <a href="{% url 'products:index' %}" class="list-group-item">Все</a>
+                    <a href="{% url 'products:products_by_category' 0 %}" class="list-group-item">Все</a>
             </div>
 
         </div>

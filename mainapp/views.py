@@ -13,17 +13,18 @@ def index(request):
 
 def products(request, id=None):
     data = {
-        "title": "GeekShop - Каталог",
-        "products":  Product.objects.all(),
+        "title": "GeekShop - Товар " + str(id),
         "categories": ProductCategory.objects.all(),
+        "products": Product.objects.filter(id=id)
     }
-   # print(id)
-    return render(request, "mainapp/products.html", data)
+    return render(request, "mainapp/product.html", data)
+
+
 
 def products_by_category(request, category_id=None):
     data = {
-        "title": "GeekShop - Каталог",
-        "products": Product.objects.filter(category_id=category_id),
+        "title": "GeekShop - Каталог товаров",
+        "products": Product.objects.filter(category_id=category_id) if category_id else Product.objects.all(),
         "categories": ProductCategory.objects.all()
     }
     return render(request, "mainapp/products.html", data)
