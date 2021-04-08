@@ -7,7 +7,7 @@ from mainapp.models import Product
 
 
 class UserAdminRegisterForm(UserRegisterform):
-    avatar = forms.ImageField(widget=forms.FileInput())
+    avatar = forms.ImageField(widget=forms.FileInput(), required=False)
 
     class Meta:
         model = User

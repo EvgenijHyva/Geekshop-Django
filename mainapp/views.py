@@ -26,9 +26,10 @@ def products(request, product_name=None, category_id=None, page=1):
         })
         return render(request, "mainapp/product.html", data)
 
-    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
-
-    paginator = Paginator(object_list=products, per_page=3)
+    products = Product.objects.filter(category_id=category_id) if category_id else\
+        Product.objects.all()
+    # сортировка:
+    paginator = Paginator(object_list=products.order_by("price"), per_page=3)
     try:  # Paginator рекомендует использовать такую конструкцию для отлова ошибок, в случае:
         products_paginator = paginator.page(number=page)  # если передастся например мистическим образом float
     except PageNotAnInteger:  # тогда перенаправит на первую страницу

@@ -39,7 +39,7 @@ class UserRegisterform(UserCreationForm):  # форма регистрации r
 
 
 class UserProfileForm(UserChangeForm):  # форма обновления информации в profile.html
-    avatar = forms.ImageField(widget=forms.FileInput()) #
+    avatar = forms.ImageField(widget=forms.FileInput(), required=False)
 
     class Meta:  # добавим поля которые для обновления и которые служат для отображения
         model = User
