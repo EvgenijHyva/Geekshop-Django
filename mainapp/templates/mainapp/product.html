@@ -1,0 +1,27 @@
+{% extends "mainapp/base.html" %}
+{% block content %}
+
+    {% for product in products %}
+            <div class="col-lg-4 col-md-6 mb-4" style="margin-top: 5.5em!important;margin: auto;">
+                    <div class="card h-100">
+                            <img class="card-img-top"
+                                 src="/media/{{product.image}}"
+                                 alt="">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                {{product.name}}
+                            </h4>
+                            <h5>{{product.price}} руб.</h5>
+                            <p class="card-text">{{product.description}}</p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="{% url 'baskets:basket_add' product.id %}">
+                            <button type="button" class="btn btn-outline-success" style="width:100%;">
+                                Отправить в корзину</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    {% endfor %}
+
+{% endblock %}
