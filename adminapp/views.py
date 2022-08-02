@@ -1,24 +1,21 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy  # reverse_lazy для работы в классе
+from django.urls import reverse, reverse_lazy
 from authapp.models import User
 from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm
-from django.contrib import messages  # выводит сообщения если операция успешна или нет
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.views.generic.list import ListView  # для CBV отвечает за отображение обьектов в списке
-from django.utils.decorators import method_decorator  # декоратор для использования декоратора в классе
+from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-# классы позволяющие создавать обьекты, обновлять обьекты и удалять их
 
-@user_passes_test(lambda u: u.is_superuser)  # когда проходит тест и может посетить эту страницу,
-def index(request):  # в противном случае переходит на страницу login
-    """
-    оборачиваем все контролеры в декоратор user_passes_test и передаем лямда функцию провод
-    щюю тесты
-    """
+
+@user_passes_test(lambda u: u.is_superuser)
+def index(request):
     context = {
         "title": "GeekShop - Admin main"
     }
     return render(request, "adminapp/index.html", context)
+
 
 class UserListView(ListView):
     """список пользователей для страницы adminapp/admin-users-read.html"""
@@ -54,9 +51,6 @@ class UserCreateView(CreateView):
 
 
 class UserUpdateView(UpdateView):
-    """ логика метода admin_users_update так же используется в UpdateView, который подразумевает конкретный обьект
-    класс UpdateView подразумевает так же как и в методе admin_users_update аргумент user_id
-    """
     model = User
     template_name = "adminapp/admin-users-update-delete.html"
     success_url = reverse_lazy("admins:admin_users_read")
@@ -88,6 +82,7 @@ class UserDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
+
 @user_passes_test(lambda u: u.is_superuser)
 def admin_users_read(request):
     context = {
@@ -97,7 +92,6 @@ def admin_users_read(request):
     return render(request, "adminapp/admin-users-read.html", context)
 
 
-# контроллер для создания пользователя на странице admin-users-create
 @user_passes_test(lambda u: u.is_superuser)
 def admin_users_create(request):
     if request.method == "POST":
@@ -136,7 +130,6 @@ def admin_users_update(request, id):
     return render(request, "adminapp/admin-users-update-delete.html", context)
 
 
-# контроллер на удаление
 @user_passes_test(lambda u: u.is_superuser)
 def admin_users_delete(request, id):
     user = User.objects.get(id=id)
@@ -148,6 +141,7 @@ def admin_users_delete(request, id):
         user.save()
         messages.warning(request, f"удален пользователь {user.username}")
     return HttpResponseRedirect(reverse("admins:admin_users_read"))
+
 
 def admin_products(request):
     context = {

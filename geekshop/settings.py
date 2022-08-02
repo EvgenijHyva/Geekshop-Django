@@ -117,7 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # указываем где установлена папка static
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
@@ -132,3 +132,4 @@ AUTH_USER_MODEL = 'authapp.User'
 
 # срабатывает когда нужно зайти на страицу авторизованым
 LOGIN_URL = "/auth/login/"
+
