@@ -1,8 +1,9 @@
 from django.urls import path
+from adminapp.apps import AdminappConfig
 from adminapp.views import index, admin_users_read, admin_users_create, admin_users_update, admin_users_delete, \
     admin_products, admin_categories, UserListView, UserCreateView, UserUpdateView, UserDeleteView
 
-app_name = "adminapp"
+app_name = AdminappConfig.name
 
 urlpatterns = [
     path("", index, name="index"),

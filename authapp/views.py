@@ -1,24 +1,19 @@
 from django.shortcuts import render, HttpResponseRedirect
-# чтобы тользоваться формами нужно их импортировать
 from authapp.forms import UserLoginForm, UserRegisterform, UserProfileForm
-# так же нужно импортировать модель для работы с ней
-from authapp.models import User
 from django.contrib import auth
 from django.urls import reverse
 from basket.models import Basket
-from django.contrib import messages  # выводит сообщения  если операция успешна или нет
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
 def login(request):
-    # авторизация пользователя
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
             username = request.POST["username"]
             password = request.POST["password"]
             user = auth.authenticate(username=username, password=password)
-            # print(user.__dict__)
             # messages.success(request, "Вы успешно авторизовались")
             if user and user.is_active:
                 auth.login(request, user)
@@ -37,8 +32,8 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterform(data=request.POST)
         if form.is_valid():
-            form.save()  # метод сохраняет данные формы в БД
-            messages.success(request, "Вы успешно зарегистрировались")  # при регистрации
+            form.save()
+            messages.success(request, "Вы успешно зарегистрировались")
             return HttpResponseRedirect(reverse("auth:login"))
         else:
             print(form.errors)
@@ -62,19 +57,17 @@ def logout(request):
 def profile(request):
     # обновление данных!!!
     if request.method == "POST":
-        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)  # для работы с
-        # изображениями files
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("auth:profile"))
-    # просто заходим в личный кабинет проверить данные
     else:
         form = UserProfileForm(instance=request.user)
 
     content = {
         "title": "GeekShop - профиль",
         "form": form,
-        "baskets": Basket.objects.filter(user=request.user),  # фильтрация по пользователю из всех корзин
+        "baskets": Basket.objects.filter(user=request.user),
         # "total_quantity": sum(basket.quantity for basket in baskets),
         # "total_sum": sum(basket.sum() for basket in baskets)
     }

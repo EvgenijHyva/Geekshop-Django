@@ -2,16 +2,19 @@ from django.contrib import admin
 from mainapp.models import ProductCategory, Product
 
 
-admin.site.register(ProductCategory)
-# admin.site.register(Product) для отображения используется метод str
+@admin.register(ProductCategory)
+class AdminCategory(admin.ModelAdmin):
+    readonly_fields = ("created_at", "updated_at", )
+    ordering = ("name", "id",)
+    search_fields = ("name", )
+    list_display = ("id", "name", "created_at", "updated_at", "is_active")
 
 
-@admin.register(Product)   # регистрируем модель по новой
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "category", "price", "quantity")  # указываем поля для отображения
-    fields = ("name", "image", "description", "short_description", ("price", "quantity"), "category")  # соеденение
-    # полей
-    readonly_fields = ("short_description", ) # поля для чтения
-    ordering = ("-name", )  # сортировка по: названию (default: ID) дефис "-" обратный порядок
+    list_display = ("name", "category", "price", "quantity")
+    fields = ("name", "image", "description", "short_description", ("price", "quantity"), "category")
+    readonly_fields = ("short_description", )
+    ordering = ("-name", )
 
     search_fields = ("name", "category__name")

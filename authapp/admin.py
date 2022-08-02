@@ -1,6 +1,10 @@
 from django.contrib import admin
-
-# до регистрации нет отображения пользователей в админке
 from authapp.models import User
 
-admin.site.register(User)
+
+@admin.register(User)
+class AdminShopUser(admin.ModelAdmin):
+    readonly_fields = ("date_joined", "id")
+    ordering = ("username", "id", "is_superuser")
+    search_fields = ("username", "first_name", "last_name")
+    list_display = ("username", "email", "is_superuser", "is_staff", "is_active", "date_joined")

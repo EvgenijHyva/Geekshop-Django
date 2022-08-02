@@ -1,7 +1,8 @@
 from django.urls import path
 from authapp.views import register, login, logout, profile
+from authapp.apps import AuthappConfig
 
-app_name = "authapp"
+app_name = AuthappConfig.name
 
 urlpatterns = [
     path("login/", login, name="login"),
