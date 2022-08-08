@@ -1,10 +1,13 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from authapp.forms import UserLoginForm, UserRegisterform, UserProfileForm
 from django.contrib import auth
 from django.urls import reverse
+
+from authapp.models import User
 from basket.models import Basket
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from core.utils import send_verify_mail
 
 
 def login(request):
@@ -32,9 +35,14 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterform(data=request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Вы успешно зарегистрировались")
-            return HttpResponseRedirect(reverse("auth:login"))
+            user = form.save()
+            if send_verify_mail(user):
+                messages.success(request, f"Вы успешно зарегистрировались, письмо верификации отправлено на "
+                                          f"{user.email}")
+                return HttpResponseRedirect(reverse("auth:login"))
+            else:
+                messages.error(request, "Ошибка регистрации пользователяб, письмо верификации не отправлено")
+                return HttpResponseRedirect(reverse("auth:register"))
         else:
             print(form.errors)
 
@@ -52,10 +60,8 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-# контроллер личного кабинета:
 @login_required
 def profile(request):
-    # обновление данных!!!
     if request.method == "POST":
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
@@ -72,3 +78,18 @@ def profile(request):
         # "total_sum": sum(basket.sum() for basket in baskets)
     }
     return render(request, "authapp/profile.html", content)
+
+
+def verify(request, email, activation_key):
+    try:
+        user = get_object_or_404(User, email=email)
+        if (user.activation_key == activation_key) and not user.is_activation_key_expired():
+            user.is_active = True
+            user.save()
+            auth.login(request, user)
+        else:
+            print(f"User ({user}) activation error")
+            return render(request, "authapp/verification.html")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return HttpResponseRedirect(reverse("index"))

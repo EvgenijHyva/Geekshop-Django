@@ -1,3 +1,6 @@
+import hashlib
+import random
+
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from authapp.models import User
 from django import forms
@@ -8,19 +11,16 @@ class UserLoginForm(AuthenticationForm):
         model = User
         fields = ("username", "password")
 
-    # дополнительные параметры:
-    def __init__(self, *args, **kwargs):  # переопределяя метод нужно указать
-        super(UserLoginForm, self).__init__(*args, **kwargs)  # все переменные что было созданы выше их нужно
-        # использовать
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
 
-        self.fields["username"].widget.attrs['placeholder'] = "Введите имя пользователя"  # добавим placeholder
+        self.fields["username"].widget.attrs['placeholder'] = "Введите имя пользователя"
         self.fields["password"].widget.attrs['placeholder'] = "Введите пароль"
-        # добавим класс в input циклом for:
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control py-4"
 
 
-class UserRegisterform(UserCreationForm):  # форма регистрации register.html
+class UserRegisterform(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name", "password1", "password2")
@@ -37,11 +37,19 @@ class UserRegisterform(UserCreationForm):  # форма регистрации r
             field.widget.attrs["class"] = "form-control py-4"
             field.help_text = ''
 
+    def save(self):
+        user = super(UserRegisterform, self).save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode("utf8")).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode("utf8")).hexdigest()
+        user.save()
+        return user
 
-class UserProfileForm(UserChangeForm):  # форма обновления информации в profile.html
+
+class UserProfileForm(UserChangeForm):
     avatar = forms.ImageField(widget=forms.FileInput(), required=False)
 
-    class Meta:  # добавим поля которые для обновления и которые служат для отображения
+    class Meta:
         model = User
         fields = ("first_name", "last_name", "avatar", "username", "email")
 
@@ -50,6 +58,6 @@ class UserProfileForm(UserChangeForm):  # форма обновления инф
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control py-4"
 
-        self.fields['username'].widget.attrs['readonly'] = True  # поле только для чтения
+        self.fields['username'].widget.attrs['readonly'] = True
         self.fields['email'].widget.attrs['readonly'] = True
         self.fields["avatar"].widget.attrs["class"] = "custom-file-input"

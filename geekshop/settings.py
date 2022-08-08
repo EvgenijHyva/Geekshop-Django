@@ -133,3 +133,19 @@ AUTH_USER_MODEL = 'authapp.User'
 # срабатывает когда нужно зайти на страицу авторизованым
 LOGIN_URL = "/auth/login/"
 
+# Настройки email
+DOMAIN_NAME = "http://localhost:8000"
+
+EMAIL_HOST = "localhost"
+EMAIL_PORT = "25"
+EMAIL_HOST_USER = "django@geekshop.local"
+EMAIL_HOST_PASSWORD = "geekshop"
+EMAIL_USE_SSL = False
+
+# smtp debug
+# sudo python3 -m smtpd -n -c DebuggingServer localhost:25
+
+# File debug
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_FILE_PATH = "tmp/email-messages/
+
