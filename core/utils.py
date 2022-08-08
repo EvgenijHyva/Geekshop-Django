@@ -14,7 +14,7 @@ def send_verify_mail(user) -> bool:
     title = f"{user} confirmation link"
     message = f"""
         For {user} account verification on platform 
-        {settings.DOMAIN_NAME} click on verifieng ling:
+        {settings.DOMAIN_NAME} click on verifying ling:
         {settings.DOMAIN_NAME}{verify_link}
     """
     return send_mail(
