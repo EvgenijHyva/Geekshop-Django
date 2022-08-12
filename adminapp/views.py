@@ -136,7 +136,6 @@ def admin_users_delete(request, id):
     if user.is_superuser:
         messages.warning(request, "superuser cant be deleted")
     else:
-        # user.delete()
         user.is_active = False
         user.save()
         messages.warning(request, f"удален пользователь {user.username}")
