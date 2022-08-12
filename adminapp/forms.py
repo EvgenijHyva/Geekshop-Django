@@ -1,10 +1,10 @@
 from django import forms
-from authapp.forms import UserRegisterform, UserProfileForm
+from authapp.forms import UserRegisterForm, UserProfileForm
 from authapp.models import User
 from mainapp.models import Product
 
 
-class UserAdminRegisterForm(UserRegisterform):
+class UserAdminRegisterForm(UserRegisterForm):
     avatar = forms.ImageField(widget=forms.FileInput(), required=False)
 
     class Meta:

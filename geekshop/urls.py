@@ -25,9 +25,10 @@ urlpatterns = [
     path("products/", include("mainapp.urls", namespace="products")),
     path("auth/", include("authapp.urls", namespace="auth")),
     path("baskets/", include("basket.urls", namespace="baskets")),
-    path("admin-staff/", include("adminapp.urls", namespace="admins"))
+    path("admin-staff/", include("adminapp.urls", namespace="admins")),
+    path("social", include("social_django.urls", namespace="social"))
 ]
 
-if settings.DEBUG: # Локально
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

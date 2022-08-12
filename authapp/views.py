@@ -1,8 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from authapp.forms import UserLoginForm, UserRegisterform, UserProfileForm
+from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm, ShopUserProfileForm
 from django.contrib import auth
 from django.urls import reverse
-
+from django.db import transaction
 from authapp.models import User
 from basket.models import Basket
 from django.contrib import messages
@@ -33,7 +33,7 @@ def login(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterform(data=request.POST)
+        form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             user = form.save()
             if send_verify_mail(user):
@@ -47,7 +47,7 @@ def register(request):
             print(form.errors)
 
     else:
-        form = UserRegisterform()
+        form = UserRegisterForm()
     content = {
         "form": form,
         "title": "GeekShop - Регистрация"
@@ -61,19 +61,24 @@ def logout(request):
 
 
 @login_required
+@transaction.atomic
 def profile(request):
     if request.method == "POST":
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
-        if form.is_valid():
+        profile = ShopUserProfileForm(data=request.POST, instance=request.user.shopuserprofile)
+        if form.is_valid() and profile.is_valid():
             form.save()
+            profile.save()
             return HttpResponseRedirect(reverse("auth:profile"))
     else:
         form = UserProfileForm(instance=request.user)
+        profile = ShopUserProfileForm(instance=request.user.shopuserprofile)
 
     content = {
         "title": "GeekShop - профиль",
         "form": form,
         "baskets": Basket.objects.filter(user=request.user),
+        "profile": profile
         # "total_quantity": sum(basket.quantity for basket in baskets),
         # "total_sum": sum(basket.sum() for basket in baskets)
     }
