@@ -8,6 +8,7 @@ def index(request):
     context = {"title": "GeekShop"}
     return render(request, "mainapp/index.html", context)
 
+
 def products(request, product_name=None, category_id=None, page=1):
     """Paginator класс который реализует постраничный вывод"""
     data = {

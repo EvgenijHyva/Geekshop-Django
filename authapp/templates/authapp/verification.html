@@ -1,0 +1,4 @@
+{% extends "authapp/base.html" %}
+
+<h1>Пользователь {{ request.user }} верифицирован</h1>
+<a href="{% url 'index' %}">На главную</a>
