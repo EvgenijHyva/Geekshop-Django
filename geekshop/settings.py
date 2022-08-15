@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "mainapp",
     "authapp",
     "basket",
-    "adminapp"
+    "adminapp",
+    "ordersapp"
 ]
 
 AUTHENTICATION_BACKENDS = (
